@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:latest
+        image: mongo:4.4.6 #proxmox virualizáció miatt egyszerübb a régebbivel tesztelni
         ports:
         - containerPort: 27017
         volumeMounts:
