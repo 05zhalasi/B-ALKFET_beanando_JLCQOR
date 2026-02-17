@@ -1,0 +1,53 @@
+# 1. Az Igénylés (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn # <--- Itt mondjuk meg, hogy a Longhorn adja a helyet!
+  resources:
+    requests:
+      storage: 1Gi
+---
+# 2. Maga az Adatbázis (Deployment)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /data/db # <--- Ide menti a Mongo az adatokat
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongodb-pvc # <--- Itt kötjük össze az igényléssel
+---
+# 3. Hálózati elérés (Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+  namespace: default
+spec:
+  ports:
+  - port: 27017
+  selector:
+    app: mongodb
