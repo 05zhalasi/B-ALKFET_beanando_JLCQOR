@@ -12,6 +12,8 @@ spec:
     helm:
       values: |
         architecture: replication # "Ne egy gépet kérjek, hanem egy klasztert!"
+        image:
+          tag: 8.0  # Kényszerítjük egy létező, stabil verzióra
         auth:
           rootPassword: "SzuperErosJelszo123"
           database: suli_projekt
