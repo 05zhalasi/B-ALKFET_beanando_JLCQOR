@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1 # Ez mondja meg: "Hahó, ez egy ArgoCD parancs!"
+kind: Application # Ez pedig: "Egy új alkalmazást akarok létrehozni."
+metadata:
+  name: mysql-ha-cluster # Ez lesz a neve az ArgoCD listájában.
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami # "Menj el a Bitnami áruházba!"
+    chart: mysql # "Keresd meg a 'mysql' nevű dobozt!"
+    targetRevision: 9.17.1 # "Pontosan ezt a verziót hozd el!"
+    helm:
+      values: |
+        architecture: replication # "Ne egy gépet kérjek, hanem egy klasztert!"
+        auth:
+          rootPassword: "SzuperErosJelszo123"
+          database: suli_projekt
+          replicationUser: replicator
+          replicationPassword: "ReplicatorPassword123"
+        primary:
+          persistence:
+            storageClass: "longhorn" # "A Longhornt használd tárolásra!"
+            size: 2Gi
+          service:
+            type: LoadBalancer
+        secondary:
+          replicaCount: 2 # "Két segédet (Slave-et) kérjek mellé!"
+          persistence:
+            storageClass: "longhorn"
+            size: 2Gi
+  destination:
+    server: https://kubernetes.default.svc # "Ebbe a klaszterbe telepítsd!"
+    namespace: default # "A 'default' névtérbe rakd a podokat!"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
