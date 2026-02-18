@@ -11,6 +11,12 @@ spec:
     targetRevision: 19.1.1 # Ez a legfrissebb stabil MariaDB chart
     helm:
       values: |
+        global:
+          imageRegistry: public.ecr.aws
+        image:
+          registry: public.ecr.aws
+          repository: bitnami/mariadb
+          tag: 11.4.3-debian-12-r3
         architecture: replication # "Ne egy gépet kérjek, hanem egy klasztert!"
         auth:
           rootPassword: "SzuperErosJelszo123"
