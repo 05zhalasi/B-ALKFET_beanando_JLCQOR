@@ -13,18 +13,16 @@ spec:
       values: |
         global:
           imageRegistry: public.ecr.aws
-        image:
-          registry: public.ecr.aws
-          repository: bitnami/mongodb
 
-        architecture: replicaset
-        replicaCount: 3
-
-        # Ez a rész generálja a külső IP-t kapó szervizt
+        # Kényszerítjük a fő szervizt
         service:
+          enabled: true
           type: LoadBalancer
           # annotations:
           #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
+
+        architecture: replicaset
+        replicaCount: 3
 
         auth:
           rootPassword: "SzuperErosMongo123"
