@@ -37,6 +37,11 @@ spec:
           enabled: true
           storageClass: "longhorn"
           size: 2Gi
+          service:
+          type: LoadBalancer
+          # Itt is megadhatsz fix IP-t, ha a MetalLB tartományában van:
+          # annotations:
+            # metallb.universe.tf/loadBalancerIPs: 192.168.2.234
 
         # Erőforrás korlátok (hogy ne egye meg a RAM-ot)
         resources:
