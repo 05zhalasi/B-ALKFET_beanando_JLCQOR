@@ -20,6 +20,12 @@ spec:
         architecture: replicaset
         replicaCount: 3
 
+        # Ez a rész generálja a külső IP-t kapó szervizt
+        service:
+          type: LoadBalancer
+          # annotations:
+          #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
+
         auth:
           rootPassword: "SzuperErosMongo123"
           usernames: ["suli_admin"]
@@ -30,13 +36,6 @@ spec:
           enabled: true
           storageClass: "longhorn"
           size: 2Gi
-
-        # A LoadBalancer mostantól aktív, de az IP-t a MetalLB választja ki
-        service:
-          type: LoadBalancer
-          # Ha fix IP kellene, vedd le a kommentet az alábbi sorokról:
-          # annotations:
-          #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
 
         resources:
           limits:
