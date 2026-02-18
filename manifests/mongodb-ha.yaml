@@ -20,14 +20,6 @@ spec:
         architecture: replicaset
         replicaCount: 3
 
-        externalAccess:
-          enabled: true
-          service:
-            type: LoadBalancer
-            # Itt tarthatod a példát a fix IP-re (most kikommentelve):
-            # annotations:
-            #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
-
         auth:
           rootPassword: "SzuperErosMongo123"
           usernames: ["suli_admin"]
@@ -39,11 +31,22 @@ spec:
           storageClass: "longhorn"
           size: 2Gi
 
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            memory: 256Mi
+        # --- ez azért kell mert alapból nem enged loadbalancer ip-t adni neki
+        extraDeploy:
+          - apiVersion: v1
+            kind: Service
+            metadata:
+              name: mongodb-external-lb
+            spec:
+              type: LoadBalancer
+              ports:
+                - name: mongodb
+                  port: 27017
+                  targetPort: mongodb
+              selector:
+                app.kubernetes.io/name: mongodb
+                app.kubernetes.io/instance: mongodb-ha-cluster
+
   destination:
     server: https://kubernetes.default.svc
     namespace: default
