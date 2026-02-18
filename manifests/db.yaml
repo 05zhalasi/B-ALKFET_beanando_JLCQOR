@@ -34,9 +34,12 @@ spec:
         # TIPP: A mysql:5.7 stabilabb régebbi CPU-kon (Proxmox), mint a 8.0
         # Ha a mongodb 5-ös nem ment, akkor a mysql 8-as se biztos, hogy menne.
         image: mysql:5.7
-        env:            # ÚJDONSÁG! A MySQL-nek kötelező jelszót adni induláskor
+env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "SzuperTitkosJelszo123"
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass  # A titkos doboz neve
+              key: password     # A kulcs neve a dobozon belül
         ports:
         - containerPort: 3306 # MySQL szabvány port
         volumeMounts:
