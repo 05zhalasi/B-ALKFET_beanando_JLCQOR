@@ -34,7 +34,7 @@ spec:
         # TIPP: A mysql:5.7 stabilabb régebbi CPU-kon (Proxmox), mint a 8.0
         # Ha a mongodb 5-ös nem ment, akkor a mysql 8-as se biztos, hogy menne.
         image: mysql:5.7
-    env:
+        env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
