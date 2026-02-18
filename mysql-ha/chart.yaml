@@ -1,0 +1,10 @@
+apiVersion: v2
+name: my-database
+description: Profi HA MySQL Cluster
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+dependencies:
+  - name: mysql
+    version: 9.17.1  # Ez a Bitnami chart verziója
+    repository: https://charts.bitnami.com/bitnami
