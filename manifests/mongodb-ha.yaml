@@ -25,7 +25,12 @@ spec:
         # Hitelesítés
         auth:
           rootPassword: "SzuperErosMongo123"
-          database: suli_adatok
+          usernames:
+          - "suli_admin" # Legalább egy felhasználót kér a chart
+          passwords:
+          - "SzuperErosUserPass123"
+          databases:
+          - "suli_adatok" # És mellé az adatbázist
 
         # Tárolás (Longhorn)
         persistence:
