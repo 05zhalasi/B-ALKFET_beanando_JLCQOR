@@ -1,0 +1,62 @@
+# 1. Az Igénylés (PVC) - Most már MySQL-hez
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc       # Átneveztük
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi      # Adtunk neki picit több helyet (opcionális)
+---
+# 2. Maga az Adatbázis (Deployment)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql           # Átneveztük
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: mysql        # Címke csere
+  strategy:
+    type: Recreate      # Fontos! Adatbázisnál jobb, ha nem fut kettő egyszerre frissítéskor
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        # TIPP: A mysql:5.7 stabilabb régebbi CPU-kon (Proxmox), mint a 8.0
+        # Ha a mongodb 5-ös nem ment, akkor a mysql 8-as se biztos, hogy menne.
+        image: mysql:5.7
+        env:            # ÚJDONSÁG! A MySQL-nek kötelező jelszót adni induláskor
+        - name: MYSQL_ROOT_PASSWORD
+          value: "SzuperTitkosJelszo123"
+        ports:
+        - containerPort: 3306 # MySQL szabvány port
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql # <--- A MySQL IDE menti az adatokat (nem /data/db-re)
+      volumes:
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc # Összekötjük az új PVC-vel
+---
+# 3. Hálózati elérés (Service) - KÜLSŐ ELÉRÉSSEL
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  namespace: default
+spec:
+  selector:
+    app: mysql
+  type: LoadBalancer  # <--- EZ A LÉNYEG! Kérünk IP-t a routertől (MetalLB)
+  ports:
+  - port: 3306
+    targetPort: 3306
