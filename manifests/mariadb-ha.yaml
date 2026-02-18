@@ -1,19 +1,17 @@
 apiVersion: argoproj.io/v1alpha1 # Ez mondja meg: "Hahó, ez egy ArgoCD parancs!"
 kind: Application # Ez pedig: "Egy új alkalmazást akarok létrehozni."
 metadata:
-  name: mysql-ha-cluster # Ez lesz a neve az ArgoCD listájában.
+  name: mariadb-ha-cluster # Ez lesz a neve az ArgoCD listájában.
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://charts.bitnami.com/bitnami # "Menj el a Bitnami áruházba!"
-    chart: mysql # "Keresd meg a 'mysql' nevű dobozt!"
-    targetRevision: 9.17.1 # "Pontosan ezt a verziót hozd el!"
+    chart: mariadb # "Keresd meg a 'mariadb' nevű dobozt!"
+    targetRevision: 19.1.1 # Ez a legfrissebb stabil MariaDB chart
     helm:
       values: |
         architecture: replication # "Ne egy gépet kérjek, hanem egy klasztert!"
-        image:
-          tag: 8.0  # Kényszerítjük egy létező, stabil verzióra
         auth:
           rootPassword: "SzuperErosJelszo123"
           database: suli_projekt
@@ -24,7 +22,7 @@ spec:
             storageClass: "longhorn" # "A Longhornt használd tárolásra!"
             size: 2Gi
           service:
-            type: LoadBalancer
+            type: LoadBalancer # Kintről elérhető írás
         secondary:
           replicaCount: 2 # "Két segédet (Slave-et) kérjek mellé!"
           persistence:
