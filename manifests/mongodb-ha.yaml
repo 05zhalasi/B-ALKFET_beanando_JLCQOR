@@ -8,42 +8,36 @@ spec:
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: mongodb
-    targetRevision: 15.6.21 # Stabil verzió
+    targetRevision: 15.6.21
     helm:
       values: |
-        # Registry javítás az Amazon szervereire
         global:
           imageRegistry: public.ecr.aws
         image:
           registry: public.ecr.aws
           repository: bitnami/mongodb
 
-        # HA architektúra (Replica Set)
         architecture: replicaset
         replicaCount: 3
 
-        # Hitelesítés
         auth:
           rootPassword: "SzuperErosMongo123"
-          usernames:
-          - "suli_admin" # Legalább egy felhasználót kér a chart
-          passwords:
-          - "SzuperErosUserPass123"
-          databases:
-          - "suli_adatok" # És mellé az adatbázist
+          usernames: ["suli_admin"]
+          passwords: ["SzuperErosUserPass123"]
+          databases: ["suli_adatok"]
 
-        # Tárolás (Longhorn)
         persistence:
           enabled: true
           storageClass: "longhorn"
           size: 2Gi
+
+        # A LoadBalancer mostantól aktív, de az IP-t a MetalLB választja ki
         service:
           type: LoadBalancer
-          # Itt is megadhatsz fix IP-t, ha a MetalLB tartományában van:
-        # annotations:
-          # metallb.universe.tf/loadBalancerIPs: 192.168.2.234
+          # Ha fix IP kellene, vedd le a kommentet az alábbi sorokról:
+          # annotations:
+          #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
 
-        # Erőforrás korlátok (hogy ne egye meg a RAM-ot)
         resources:
           limits:
             memory: 512Mi
