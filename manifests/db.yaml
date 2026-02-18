@@ -42,6 +42,7 @@ spec:
         volumeMounts:
         - name: mysql-storage
           mountPath: /var/lib/mysql # <--- A MySQL IDE menti az adatokat (nem /data/db-re)
+          subPath: mysql-data
       volumes:
       - name: mysql-storage
         persistentVolumeClaim:
