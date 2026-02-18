@@ -13,16 +13,20 @@ spec:
       values: |
         global:
           imageRegistry: public.ecr.aws
-
-        # Kényszerítjük a fő szervizt
-        service:
-          enabled: true
-          type: LoadBalancer
-          # annotations:
-          #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
+        image:
+          registry: public.ecr.aws
+          repository: bitnami/mongodb
 
         architecture: replicaset
         replicaCount: 3
+
+        externalAccess:
+          enabled: true
+          service:
+            type: LoadBalancer
+            # Itt tarthatod a példát a fix IP-re (most kikommentelve):
+            # annotations:
+            #   metallb.universe.tf/loadBalancerIPs: 192.168.2.234
 
         auth:
           rootPassword: "SzuperErosMongo123"
