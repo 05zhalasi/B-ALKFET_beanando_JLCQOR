@@ -27,7 +27,7 @@ This will show like:
 NAME            TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
 argocd-server   NodePort   10.43.97.127   <none>        80:32489/TCP,443:32583/TCP   8m4s
 
-then open https://localhost:32583/  
+then open https://localhost:highport/  
 
 the default user is admin  
 
