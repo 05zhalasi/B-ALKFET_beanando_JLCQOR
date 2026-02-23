@@ -14,6 +14,7 @@ kind: Deployment
 metadata:
   name: lp-backend
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: lp-backend
@@ -24,7 +25,6 @@ spec:
     spec:
       containers:
       - name: lp-backend
-        # Cseréld le a saját elérhetőségedre!
         image: ghcr.io/05zhalasi/lp-backend:latest
         ports:
         - containerPort: 8080
