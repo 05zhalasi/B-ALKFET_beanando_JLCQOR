@@ -24,5 +24,26 @@ spec:
       containers:
       - name: mongodb
         image: mongo:latest
-        ports:
-        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_DATABASE
+          value: "lpdb"
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db
+        - name: init-data
+          mountPath: /data/init/albums.json
+          subPath: albums.json
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d/import.sh
+          subPath: import.sh
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongodb-data-pvc # Ez csatlakozik a már létező PVC-hez
+      - name: init-data
+        configMap:
+          name: mongodb-init-data
+      - name: init-script
+        configMap:
+          name: mongodb-init-sh
+          defaultMode: 0777

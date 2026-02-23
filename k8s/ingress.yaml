@@ -3,8 +3,11 @@ kind: Ingress
 metadata:
   name: lp-ingress
   annotations:
-    # Ez segít az Nginx-nek/Traefik-nek megérteni az útvonalakat
+    # Marad a webes belépési pont
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Itt mondjuk meg neki, hogy használja a fenti Middleware-t
+    # Formátum: névtér-név@provider
+    traefik.ingress.kubernetes.io/router.middlewares: default-strip-api@kubernetescrd
 spec:
   rules:
   - http:
