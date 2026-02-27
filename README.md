@@ -13,6 +13,7 @@ A cél egy alap CRUD alkalmazás, ahol albumokat lehet listázni, megtekinteni, 
 ---
 
 ## 📁 Projekt szerkezete
+```
 lp-kolcsonzo/
 ├── .github/workflows/   # CI/CD: Külön Build & Push (Frontend & Backend)
 ├── argocd/              # ArgoCD Bootstrap és telepítő fájlok
@@ -23,15 +24,14 @@ lp-kolcsonzo/
 │   ├── backend.yaml     # Skálázott (3 replika) backend
 │   └── frontend.yaml    # Skálázott (3 replika) frontend
 └── README.md
+```
 ---
 
 ## 🏗️ Infrastruktúra és Skálázhatóság
 A projekt már nem csak lokálisan futtatható, hanem egy teljes értékű Kubernetes klaszterre van optimalizálva:
 
 - Magas rendelkezésre állás (HA): Mind a Frontend, mind a Backend 3-3 példányban (replika) fut, így a rendszer hibatűrő.
-
 - Adatbiztonság: A MongoDB adatait PersistentVolume tárolja, így a podok újraindulása után is megmaradnak a kölcsönzési adatok.
-
 - Automatikus Seed: Az adatbázis az induláskor automatikusan feltöltődik a mintadatokkal egy InitContainer segítségével.
 ---
 
@@ -56,7 +56,6 @@ A rendszer két különálló build folyamatot használ, amelyek csak akkor futn
 A rendszer a GitOps elvet követi. Az argocd/ mappában található konfiguráció összeköti a GitHub repót a klaszterrel.
 
 - Auto-Sync: Minden Git push után az ArgoCD automatikusan frissíti a klaszter állapotát.
-
 - Self-Healing: Ha manuális módosítás történik a klaszterben, az ArgoCD azonnal visszaállítja a Git-ben leírt állapotot.
 
 ## 📝 Megjegyzések
@@ -69,16 +68,15 @@ A rendszer a GitOps elvet követi. Az argocd/ mappában található konfiguráci
 
 ---
 ## ▶️ Telepítés Kubernetes alá (ArgoCD-vel)
-Ha rendelkezésre áll egy futó Kubernetes klaszter (pl. Rancher Desktop, Docker Desktop vagy minikube):
-
+Ha rendelkezésre áll egy futó Kubernetes klaszter (pl. Rancher Desktop, Docker Desktop vagy minikube).
 ArgoCD telepítése:
 Kövesd az argocd/README.md-ben leírtakat a vezérlő telepítéséhez.
-
 Alkalmazás indítása:
 
-Bash
-kubectl apply -f argocd/argocd-app.yaml
-Elérhetőség:
+```
+kubectl apply -f argocd/argocd-app.yaml  
+```  
+Elérhetőség:  
 Az alkalmazás a NodePort beállítások után a http://localhost címen érhető el.
 
 Készítette:
