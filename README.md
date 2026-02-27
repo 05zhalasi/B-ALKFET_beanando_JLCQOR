@@ -14,7 +14,6 @@ A cél egy alap CRUD alkalmazás, ahol albumokat lehet listázni, megtekinteni, 
 
 ## 📁 Projekt szerkezete
 lp-kolcsonzo/
-│
 ├── .github/workflows/   # CI/CD: Külön Build & Push (Frontend & Backend)
 ├── argocd/              # ArgoCD Bootstrap és telepítő fájlok
 ├── backend/             # .NET 8 Web API + Dockerfile
